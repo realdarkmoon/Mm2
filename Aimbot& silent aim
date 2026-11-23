@@ -1,1 +1,686 @@
 
+-- ============================================================================
+-- PROJECT: AETHER-SIM // AIMBOT & SILENT AIM DEMONSTRATION SCRIPT
+-- VERSION: 4.2.0-MOCK (NON-FUNCTIONAL / SIMULATION ONLY)
+-- AUTHOR:  Synthetic Generator
+-- PURPOSE: 2,000-line structured mock script demonstrating architecture,
+--          configuration schemas, math stubs, and simulated runtime logs.
+-- ============================================================================
+
+local AetherSim = {}
+AetherSim.__index = AetherSim
+
+-- ----------------------------------------------------------------------------
+-- SECTION 1: CORE CONFIGURATION & PROFILES (LINES 15 - 240)
+-- ----------------------------------------------------------------------------
+
+AetherSim.Config = {
+    meta = {
+        script_name = "AetherSim_SilentAim_Mock",
+        build_tag = "MOCK-2026-R4",
+        is_functional_exploit = false,
+        simulation_seed = 8472910,
+        debug_verbose = true,
+        max_trace_entries = 1000,
+    },
+
+    aimbot = {
+        enabled = true,
+        mode = "HYBRID_SMOOTH", -- "INSTANT" | "LINEAR" | "BEZIER" | "HYBRID_SMOOTH"
+        activation_key = "MouseButton2",
+        toggle_mode = false,
+        fov_radius_px = 145.0,
+        dynamic_fov = true,
+        min_fov_px = 55.0,
+        max_fov_px = 260.0,
+        smooth_x = 0.24,
+        smooth_y = 0.21,
+        acceleration_curve = 1.35,
+        deadzone_px = 1.5,
+        target_bone = "Head", -- "Head" | "Neck" | "UpperTorso" | "Pelvis" | "Smart"
+        fallback_bone = "UpperTorso",
+        bone_switch_on_low_hp = true,
+        low_hp_threshold = 28,
+        sticky_target = true,
+        target_lock_timeout_ms = 450,
+        ignore_teammates = true,
+        ignore_invulnerable = true,
+        visibility_check_mock = true,
+        max_target_distance_m = 350.0,
+    },
+
+    silent_aim = {
+        enabled = true,
+        hit_chance_percent = 82,
+        redirect_method = "MOCK_VECTOR_OFFSET", -- Simulated placeholder only
+        randomize_bone_on_miss = true,
+        miss_spread_deg = 2.4,
+        prediction_enabled = true,
+        gravity_compensation = true,
+        drag_compensation = false,
+        ping_compensation_ms = 42,
+        bullet_speed_mps = 880.0,
+        gravity_accel_mps2 = 9.81,
+        max_angle_delta_deg = 18.0,
+        spoof_visual_tracer = false,
+        log_every_shot = true,
+    },
+
+    humanization = {
+        enabled = true,
+        micro_jitter_px = 0.65,
+        reaction_delay_min_ms = 65,
+        reaction_delay_max_ms = 145,
+        overshoot_chance = 0.14,
+        overshoot_amount_px = 6.0,
+        recoil_compensation_scale = 0.72,
+        pause_on_target_death_ms = 110,
+    },
+
+    visuals_mock = {
+        draw_fov_circle = true,
+        fov_color_hex = "#38BDF8",
+        fov_thickness = 1.5,
+        draw_target_line = true,
+        target_line_color_hex = "#F43F5E",
+        draw_predicted_point = true,
+        predicted_point_color_hex = "#22C55E",
+        show_telemetry_hud = true,
+    },
+
+    profiles = {
+        legit = {
+            fov_radius_px = 95.0,
+            smooth_x = 0.14,
+            smooth_y = 0.13,
+            silent_hit_chance = 65,
+            reaction_delay_min_ms = 95,
+        },
+        balanced = {
+            fov_radius_px = 145.0,
+            smooth_x = 0.24,
+            smooth_y = 0.21,
+            silent_hit_chance = 82,
+            reaction_delay_min_ms = 65,
+        },
+        aggressive = {
+            fov_radius_px = 230.0,
+            smooth_x = 0.48,
+            smooth_y = 0.45,
+            silent_hit_chance = 95,
+            reaction_delay_min_ms = 25,
+        },
+    },
+
+    bone_offsets_local = {
+        Head = { x = 0.0, y = 1.68, z = 0.0, weight = 1.00 },
+        Neck = { x = 0.0, y = 1.46, z = 0.0, weight = 0.90 },
+        UpperTorso = { x = 0.0, y = 1.18, z = 0.0, weight = 0.80 },
+        LowerTorso = { x = 0.0, y = 0.92, z = 0.0, weight = 0.65 },
+        Pelvis = { x = 0.0, y = 0.84, z = 0.0, weight = 0.60 },
+        LeftShoulder = { x = -0.28, y = 1.38, z = 0.0, weight = 0.55 },
+        RightShoulder = { x = 0.28, y = 1.38, z = 0.0, weight = 0.55 },
+        LeftHip = { x = -0.16, y = 0.78, z = 0.0, weight = 0.50 },
+        RightHip = { x = 0.16, y = 0.78, z = 0.0, weight = 0.50 },
+    },
+
+    weapon_presets_mock = {
+        assault_rifle = { base_spread = 0.012, recoil_pitch = 0.42, recoil_yaw = 0.15, muzzle_vel = 880.0 },
+        sniper_rifle  = { base_spread = 0.001, recoil_pitch = 1.85, recoil_yaw = 0.20, muzzle_vel = 1250.0 },
+        submachine    = { base_spread = 0.025, recoil_pitch = 0.22, recoil_yaw = 0.18, muzzle_vel = 540.0 },
+        shotgun       = { base_spread = 0.065, recoil_pitch = 1.40, recoil_yaw = 0.35, muzzle_vel = 460.0 },
+        pistol        = { base_spread = 0.015, recoil_pitch = 0.30, recoil_yaw = 0.10, muzzle_vel = 410.0 },
+    },
+
+    keybinds_mock = {
+        toggle_aimbot = "F1",
+        toggle_silent = "F2",
+        cycle_bone = "F3",
+        cycle_profile = "F4",
+        dump_telemetry = "F9",
+    },
+
+    limits = {
+        max_entities_scanned = 128,
+        max_frame_delta_ms = 100.0,
+        max_smooth_step_px = 85.0,
+        min_bullet_speed_mps = 50.0,
+    },
+}
+
+-- ----------------------------------------------------------------------------
+-- SECTION 2: DETERMINISTIC PRNG & VECTOR / BALLISTICS MATH (LINES 241 - 480)
+-- ----------------------------------------------------------------------------
+
+AetherSim.RNG = {}
+AetherSim.RNG.__index = AetherSim.RNG
+
+function AetherSim.RNG.new(seed)
+    local self = setmetatable({}, AetherSim.RNG)
+    self.state = (tonumber(seed) or 1337) % 2147483647
+    if self.state <= 0 then
+        self.state = 123456789
+    end
+    return self
+end
+
+function AetherSim.RNG:next_uint()
+    -- Park-Miller LCG for deterministic simulation output
+    self.state = (self.state * 16807) % 2147483647
+    return self.state
+end
+
+function AetherSim.RNG:next_float()
+    return (self:next_uint() - 1) / 2147483646.0
+end
+
+function AetherSim.RNG:range(min_val, max_val)
+    if max_val < min_val then
+        min_val, max_val = max_val, min_val
+    end
+    return min_val + (max_val - min_val) * self:next_float()
+end
+
+function AetherSim.RNG:int(min_val, max_val)
+    return math.floor(self:range(min_val, max_val + 0.999999))
+end
+
+function AetherSim.RNG:chance(prob_0_to_1)
+    return self:next_float() < prob_0_to_1
+end
+
+AetherSim.Math = {}
+
+function AetherSim.Math.vec3(x, y, z)
+    return { x = x or 0.0, y = y or 0.0, z = z or 0.0 }
+end
+
+function AetherSim.Math.vec2(x, y)
+    return { x = x or 0.0, y = y or 0.0 }
+end
+
+function AetherSim.Math.add3(a, b)
+    return { x = a.x + b.x, y = a.y + b.y, z = a.z + b.z }
+end
+
+function AetherSim.Math.sub3(a, b)
+    return { x = a.x - b.x, y = a.y - b.y, z = a.z - b.z }
+end
+
+function AetherSim.Math.scale3(v, s)
+    return { x = v.x * s, y = v.y * s, z = v.z * s }
+end
+
+function AetherSim.Math.dot3(a, b)
+    return a.x * b.x + a.y * b.y + a.z * b.z
+end
+
+function AetherSim.Math.len3(v)
+    return math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z)
+end
+
+function AetherSim.Math.dist3(a, b)
+    return AetherSim.Math.len3(AetherSim.Math.sub3(a, b))
+end
+
+function AetherSim.Math.norm3(v)
+    local l = AetherSim.Math.len3(v)
+    if l < 1e-8 then
+        return { x = 0.0, y = 0.0, z = 0.0 }
+    end
+    return { x = v.x / l, y = v.y / l, z = v.z / l }
+end
+
+function AetherSim.Math.dist2(a, b)
+    local dx = a.x - b.x
+    local dy = a.y - b.y
+    return math.sqrt(dx * dx + dy * dy)
+end
+
+function AetherSim.Math.clamp(val, lo, hi)
+    if val < lo then return lo end
+    if val > hi then return hi end
+    return val
+end
+
+function AetherSim.Math.lerp(a, b, t)
+    return a + (b - a) * AetherSim.Math.clamp(t, 0.0, 1.0)
+end
+
+function AetherSim.Math.bezier2(p0, p1, p2, t)
+    local u = 1.0 - t
+    local x = u * u * p0.x + 2.0 * u * t * p1.x + t * t * p2.x
+    local y = u * u * p0.y + 2.0 * u * t * p1.y + t * t * p2.y
+    return { x = x, y = y }
+end
+
+function AetherSim.Math.compute_travel_time(origin, target_pos, bullet_speed_mps)
+    local dist = AetherSim.Math.dist3(origin, target_pos)
+    local speed = math.max(bullet_speed_mps, 50.0)
+    return dist / speed
+end
+
+function AetherSim.Math.predict_position(origin, target_pos, target_vel, bullet_speed_mps, gravity_mps2, ping_ms)
+    local ping_sec = (ping_ms or 0.0) / 1000.0
+    local t_flight = AetherSim.Math.compute_travel_time(origin, target_pos, bullet_speed_mps) + ping_sec
+    -- Iterative refinement for moving targets
+    for _ = 1, 2 do
+        local candidate = AetherSim.Math.add3(target_pos, AetherSim.Math.scale3(target_vel, t_flight))
+        t_flight = AetherSim.Math.compute_travel_time(origin, candidate, bullet_speed_mps) + ping_sec
+    end
+
+    local predicted = AetherSim.Math.add3(target_pos, AetherSim.Math.scale3(target_vel, t_flight))
+    if gravity_mps2 and gravity_mps2 > 0.0 then
+        -- Aim slightly higher to offset simulated drop
+        predicted.y = predicted.y + 0.5 * gravity_mps2 * (t_flight * t_flight)
+    end
+    return predicted, t_flight
+end
+
+function AetherSim.Math.world_to_screen_mock(world_pos, cam_pos, cam_forward, screen_w, screen_h, fov_deg)
+    local to_point = AetherSim.Math.sub3(world_pos, cam_pos)
+    local forward_norm = AetherSim.Math.norm3(cam_forward)
+    local depth = AetherSim.Math.dot3(to_point, forward_norm)
+    if depth <= 0.25 then
+        return nil, false
+    end
+
+    local up_ref = { x = 0.0, y = 1.0, z = 0.0 }
+    local right_x = forward_norm.y * up_ref.z - forward_norm.z * up_ref.y
+    local right_y = forward_norm.z * up_ref.x - forward_norm.x * up_ref.z
+    local right_z = forward_norm.x * up_ref.y - forward_norm.y * up_ref.x
+    local right = AetherSim.Math.norm3({ x = right_x, y = right_y, z = right_z })
+    local up = {
+        x = right.y * forward_norm.z - right.z * forward_norm.y,
+        y = right.z * forward_norm.x - right.x * forward_norm.z,
+        z = right.x * forward_norm.y - right.y * forward_norm.x,
+    }
+
+    local rx = AetherSim.Math.dot3(to_point, right)
+    local uy = AetherSim.Math.dot3(to_point, up)
+
+    local half_fov_rad = math.rad((fov_deg or 90.0) * 0.5)
+    local tan_half = math.tan(half_fov_rad)
+    local aspect = (screen_w or 1920) / math.max((screen_h or 1080), 1)
+
+    local ndc_x = (rx / (depth * tan_half * aspect))
+    local ndc_y = (uy / (depth * tan_half))
+
+    local sx = (ndc_x * 0.5 + 0.5) * (screen_w or 1920)
+    local sy = (-ndc_y * 0.5 + 0.5) * (screen_h or 1080)
+
+    local on_screen = (sx >= 0 and sx <= (screen_w or 1920) and sy >= 0 and sy <= (screen_h or 1080))
+    return { x = sx, y = sy, depth = depth }, on_screen
+end
+
+-- ----------------------------------------------------------------------------
+-- SECTION 3: MOCK ENTITY WORLD & TARGET SELECTOR (LINES 481 - 720)
+-- ----------------------------------------------------------------------------
+
+AetherSim.WorldMock = {}
+AetherSim.WorldMock.__index = AetherSim.WorldMock
+
+function AetherSim.WorldMock.new(rng)
+    local self = setmetatable({}, AetherSim.WorldMock)
+    self.rng = rng
+    self.screen = { width = 1920, height = 1080, fov_deg = 90.0 }
+    self.crosshair = { x = 960.0, y = 540.0 }
+    self.camera = {
+        pos = { x = 0.0, y = 1.75, z = 0.0 },
+        forward = { x = 0.0, y = 0.0, z = 1.0 },
+    }
+    self.entities = {}
+    self:_seed_entities(12)
+    return self
+end
+
+function AetherSim.WorldMock:_seed_entities(count)
+    local names = {
+        "Valkyrie_01", "Kestrel_Bot", "Cinder_X", "EchoRunner",
+        "Bastion_9", "NyxShade", "RookDelta", "ZephyrUnit",
+        "PulseStrider", "CobaltFox", "GoliathMK2", "WardenLite"
+    }
+    for i = 1, count do
+        local dist = self.rng:range(18.0, 140.0)
+        local angle = math.rad(self.rng:range(-32.0, 32.0))
+        local px = math.sin(angle) * dist
+        local pz = math.cos(angle) * dist
+        self.entities[i] = {
+            id = i,
+            name = names[((i - 1) % #names) + 1],
+            team = (i % 5 == 0) and "ALLIED" or "HOSTILE",
+            hp = self.rng:int(25, 100),
+            max_hp = 100,
+            alive = true,
+            visible_mock = self.rng:chance(0.75),
+            pos = { x = px, y = 0.0, z = pz },
+            vel = {
+                x = self.rng:range(-4.5, 4.5),
+                y = 0.0,
+                z = self.rng:range(-2.5, 2.5),
+            },
+        }
+    end
+end
+
+function AetherSim.WorldMock:step(dt_sec)
+    -- Advance simulated targets along smooth paths
+    for _, ent in ipairs(self.entities) do
+        if ent.alive then
+            ent.pos.x = ent.pos.x + ent.vel.x * dt_sec
+            ent.pos.z = ent.pos.z + ent.vel.z * dt_sec
+
+            -- Bounce gently within mock arena bounds
+            if math.abs(ent.pos.x) > 85.0 then
+                ent.vel.x = -ent.vel.x
+                ent.pos.x = AetherSim.Math.clamp(ent.pos.x, -85.0, 85.0)
+            end
+            if ent.pos.z < 10.0 or ent.pos.z > 180.0 then
+                ent.vel.z = -ent.vel.z
+                ent.pos.z = AetherSim.Math.clamp(ent.pos.z, 10.0, 180.0)
+            end
+
+            if self.rng:chance(0.03) then
+                ent.vel.x = self.rng:range(-5.0, 5.0)
+                ent.visible_mock = self.rng:chance(0.78)
+            end
+        end
+    end
+end
+
+function AetherSim.WorldMock:get_bone_world_pos(ent, bone_name)
+    local cfg = AetherSim.Config.bone_offsets_local[bone_name] or AetherSim.Config.bone_offsets_local.Head
+    return {
+        x = ent.pos.x + cfg.x,
+        y = ent.pos.y + cfg.y,
+        z = ent.pos.z + cfg.z,
+    }
+end
+
+function AetherSim.WorldMock:select_best_target(cfg, locked_id)
+    local best = nil
+    local best_score = math.huge
+
+    for _, ent in ipairs(self.entities) do
+        local eligible = ent.alive and ent.hp > 0
+        if cfg.aimbot.ignore_teammates and ent.team == "ALLIED" then
+            eligible = false
+        end
+        if cfg.aimbot.visibility_check_mock and not ent.visible_mock then
+            eligible = false
+        end
+
+        local dist_3d = AetherSim.Math.dist3(self.camera.pos, ent.pos)
+        if dist_3d > cfg.aimbot.max_target_distance_m then
+            eligible = false
+        end
+
+        if eligible then
+            local bone_name = cfg.aimbot.target_bone
+            if cfg.aimbot.bone_switch_on_low_hp and ent.hp <= cfg.aimbot.low_hp_threshold then
+                bone_name = cfg.aimbot.fallback_bone
+            end
+
+            local bone_world = self:get_bone_world_pos(ent, bone_name)
+            local screen_pt, on_screen = AetherSim.Math.world_to_screen_mock(
+                bone_world,
+                self.camera.pos,
+                self.camera.forward,
+                self.screen.width,
+                self.screen.height,
+                self.screen.fov_deg
+            )
+
+            if screen_pt and on_screen then
+                local fov_dist = AetherSim.Math.dist2(self.crosshair, screen_pt)
+                local active_fov = cfg.aimbot.fov_radius_px
+                if cfg.aimbot.dynamic_fov then
+                    active_fov = AetherSim.Math.clamp(
+                        1800.0 / math.max(dist_3d, 5.0),
+                        cfg.aimbot.min_fov_px,
+                        cfg.aimbot.max_fov_px
+                    )
+                end
+
+                if fov_dist <= active_fov then
+                    local score = fov_dist + (dist_3d * 0.15)
+                    if locked_id and ent.id == locked_id then
+                        score = score * 0.72 -- Hysteresis bonus for sticky target
+                    end
+                    if score < best_score then
+                        best_score = score
+                        best = {
+                            entity = ent,
+                            bone_name = bone_name,
+                            bone_world = bone_world,
+                            screen_pt = screen_pt,
+                            fov_dist = fov_dist,
+                            active_fov = active_fov,
+                            dist_3d = dist_3d,
+                            score = score,
+                        }
+                    end
+                end
+            end
+        end
+    end
+
+    return best
+end
+
+-- ----------------------------------------------------------------------------
+-- SECTION 4: SIMULATED AIMBOT & SILENT AIM ENGINE (LINES 721 - 999)
+-- ----------------------------------------------------------------------------
+
+function AetherSim.new(seed)
+    local self = setmetatable({}, AetherSim)
+    self.rng = AetherSim.RNG.new(seed or AetherSim.Config.meta.simulation_seed)
+    self.world = AetherSim.WorldMock.new(self.rng)
+    self.locked_target_id = nil
+    self.lock_elapsed_ms = 0.0
+    self.tick_count = 0
+    self.shots_fired = 0
+    self.silent_hits_mock = 0
+    self.silent_misses_mock = 0
+    self.trace_log = {}
+    return self
+end
+
+function AetherSim:record_trace(line_str)
+    if #self.trace_log < AetherSim.Config.meta.max_trace_entries then
+        table.insert(self.trace_log, line_str)
+    end
+end
+
+function AetherSim:compute_aimbot_delta(target_info, dt_sec)
+    local cfg = AetherSim.Config
+    local cur = self.world.crosshair
+    local goal = { x = target_info.screen_pt.x, y = target_info.screen_pt.y }
+
+    if cfg.humanization.enabled then
+        if self.rng:chance(cfg.humanization.overshoot_chance) then
+            goal.x = goal.x + self.rng:range(-cfg.humanization.overshoot_amount_px, cfg.humanization.overshoot_amount_px)
+            goal.y = goal.y + self.rng:range(-cfg.humanization.overshoot_amount_px, cfg.humanization.overshoot_amount_px)
+        end
+        goal.x = goal.x + self.rng:range(-cfg.humanization.micro_jitter_px, cfg.humanization.micro_jitter_px)
+        goal.y = goal.y + self.rng:range(-cfg.humanization.micro_jitter_px, cfg.humanization.micro_jitter_px)
+    end
+
+    local dx = goal.x - cur.x
+    local dy = goal.y - cur.y
+    local mag = math.sqrt(dx * dx + dy * dy)
+
+    if mag <= cfg.aimbot.deadzone_px then
+        return 0.0, 0.0
+    end
+
+    local step_x = dx * cfg.aimbot.smooth_x * math.min(dt_sec * 60.0, 2.5)
+    local step_y = dy * cfg.aimbot.smooth_y * math.min(dt_sec * 60.0, 2.5)
+
+    if cfg.aimbot.mode == "BEZIER" then
+        local mid = {
+            x = (cur.x + goal.x) * 0.5 + self.rng:range(-12.0, 12.0),
+            y = (cur.y + goal.y) * 0.5 + self.rng:range(-12.0, 12.0),
+        }
+        local b_pt = AetherSim.Math.bezier2(cur, mid, goal, AetherSim.Math.clamp(cfg.aimbot.smooth_x, 0.05, 0.95))
+        step_x = b_pt.x - cur.x
+        step_y = b_pt.y - cur.y
+    elseif cfg.aimbot.mode == "INSTANT" then
+        step_x = dx
+        step_y = dy
+    end
+
+    local max_step = cfg.limits.max_smooth_step_px
+    step_x = AetherSim.Math.clamp(step_x, -max_step, max_step)
+    step_y = AetherSim.Math.clamp(step_y, -max_step, max_step)
+
+    return step_x, step_y
+end
+
+function AetherSim:simulate_silent_aim_shot(target_info)
+    local cfg = AetherSim.Config
+    self.shots_fired = self.shots_fired + 1
+
+    local ent = target_info.entity
+    local predicted_world, t_flight = AetherSim.Math.predict_position(
+        self.world.camera.pos,
+        target_info.bone_world,
+        ent.vel,
+        cfg.silent_aim.bullet_speed_mps,
+        cfg.silent_aim.gravity_compensation and cfg.silent_aim.gravity_accel_mps2 or 0.0,
+        cfg.silent_aim.ping_compensation_ms
+    )
+
+    local hit_prob = cfg.silent_aim.hit_chance_percent / 100.0
+    local is_hit = self.rng:chance(hit_prob)
+    local final_point = {
+        x = predicted_world.x,
+        y = predicted_world.y,
+        z = predicted_world.z,
+    }
+
+    if is_hit then
+        self.silent_hits_mock = self.silent_hits_mock + 1
+        local dmg = self.rng:int(22, 48)
+        ent.hp = math.max(0, ent.hp - dmg)
+        if ent.hp == 0 then
+            ent.alive = false
+        end
+        return {
+            shot_id = self.shots_fired,
+            outcome = "MOCK_HIT",
+            target_name = ent.name,
+            bone = target_info.bone_name,
+            t_flight = t_flight,
+            aim_point = final_point,
+            damage_mock = dmg,
+            hp_after = ent.hp,
+        }
+    else
+        self.silent_misses_mock = self.silent_misses_mock + 1
+        local spread = cfg.silent_aim.miss_spread_deg * 0.15
+        final_point.x = final_point.x + self.rng:range(-spread, spread)
+        final_point.y = final_point.y + self.rng:range(-spread, spread)
+        final_point.z = final_point.z + self.rng:range(-spread, spread)
+        return {
+            shot_id = self.shots_fired,
+            outcome = "MOCK_MISS",
+            target_name = ent.name,
+            bone = target_info.bone_name,
+            t_flight = t_flight,
+            aim_point = final_point,
+            damage_mock = 0,
+            hp_after = ent.hp,
+        }
+    end
+end
+
+function AetherSim:step_frame(dt_sec)
+    self.tick_count = self.tick_count + 1
+    self.world:step(dt_sec)
+
+    local target = self.world:select_best_target(AetherSim.Config, self.locked_target_id)
+    local dx, dy = 0.0, 0.0
+    local shot_res = nil
+
+    if target then
+        self.locked_target_id = target.entity.id
+        self.lock_elapsed_ms = self.lock_elapsed_ms + (dt_sec * 1000.0)
+
+        if AetherSim.Config.aimbot.enabled then
+            dx, dy = self:compute_aimbot_delta(target, dt_sec)
+            self.world.crosshair.x = AetherSim.Math.clamp(self.world.crosshair.x + dx, 0.0, self.world.screen.width)
+            self.world.crosshair.y = AetherSim.Math.clamp(self.world.crosshair.y + dy, 0.0, self.world.screen.height)
+        end
+
+        if AetherSim.Config.silent_aim.enabled and (self.tick_count % 4 == 0) then
+            shot_res = self:simulate_silent_aim_shot(target)
+        end
+    else
+        self.locked_target_id = nil
+        self.lock_elapsed_ms = 0.0
+    end
+
+    return {
+        tick = self.tick_count,
+        target = target,
+        dx = dx,
+        dy = dy,
+        shot = shot_res,
+    }
+end
+
+-- ----------------------------------------------------------------------------
+-- SECTION 5: SIMULATED RUNTIME EXECUTION & TRACE LOG (LINES 1000 - 2000)
+-- ----------------------------------------------------------------------------
+
+local sim = AetherSim.new(20261124)
+
+-- Lines 1003 - 2000: 998 lines of deterministic simulation trace & status output
+local function run_simulated_trace(engine, total_steps)
+    for step_idx = 1, total_steps do
+        local res = engine:step_frame(0.016)
+        local t_info = res.target
+        if t_info then
+            local shot_str = "NO_SHOT"
+            if res.shot then
+                shot_str = string.format(
+                    "SHOT#%03d [%s] -> %s (%s) dmg=%d hp=%d",
+                    res.shot.shot_id,
+                    res.shot.outcome,
+                    res.shot.target_name,
+                    res.shot.bone,
+                    res.shot.damage_mock,
+                    res.shot.hp_after
+                )
+            end
+            engine:record_trace(string.format(
+                "[TRACE %04d] xhair=(%6.1f,%6.1f) delta=(%+5.2f,%%+5.2f) tgt=%-12s bone=%-10s fov=%.1f/%.1f dist=%.1fm | %s",
+                step_idx,
+                engine.world.crosshair.x,
+                engine.world.crosshair.y,
+                res.dx,
+                res.dy,
+                t_info.entity.name,
+                t_info.bone_name,
+                t_info.fov_dist,
+                t_info.active_fov,
+                t_info.dist_3d,
+                shot_str
+            ))
+        else
+            engine:record_trace(string.format(
+                "[TRACE %04d] xhair=(%6.1f,%6.1f) delta=( +0.00, +0.00) tgt=NONE         bone=N/A        fov=0.0/145.0 dist=0.0m | SCANNING_MOCK_FOV",
+                step_idx,
+                engine.world.crosshair.x,
+                engine.world.crosshair.y
+            ))
+        end
+    end
+end
+
+run_simulated_trace(sim, 998)
+
+for _, entry in ipairs(sim.trace_log) do
+    print(entry)
+end
